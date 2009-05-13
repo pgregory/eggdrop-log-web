@@ -9,3 +9,15 @@ span.time {
 	color: green;
 }
 
+span.user {
+	color: blue;
+}
+
+span.action {
+	color: red;
+}
+
+span.system {
+	font-style: italic;
+	color: grey;
+}

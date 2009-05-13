@@ -60,26 +60,36 @@ class Handler extends mtwin.web.Handler<Void> {
 
 		var month : List<Dynamic> = getMonth(yearNum, monthNum, logFiles);
 
-		var logLines : List<{time:Date, line:String}> = new List<{time:Date, line:String}>(); 
+		var logLines : List<Dynamic> = new List<Dynamic>(); 
 		var logFile : String = App.logPath + "aqsis.log." + StringTools.lpad(Std.string(dayNum), "0", 2) + monthNumbertoName.get(monthNum) + yearNum;
-		var r = ~/\[([0-9]+):([0-9]+)\] (.*)$/;
+		var time_r = ~/\[([0-9]+):([0-9]+)\] (.*)$/;
+		var action_r = ~/Action: (.*)$/;
+		var user_r = ~/<([^>]+)> (.*)$/;
 		if(neko.FileSystem.exists(logFile)) {
 			var logFileContent : Array<String> = ["No logs for that day"];
 			logFileContent = neko.io.File.getContent(logFile).split("\n");
 			for(line in logFileContent) {
-				if(r.match(line)) {
-					var time : Date = Date.fromString(r.matched(1) + ":" + r.matched(2) + ":00");
-					logLines.add({time:time, line:r.matched(3)});
+				if(time_r.match(line)) {
+					var time : Date = Date.fromString(time_r.matched(1) + ":" + time_r.matched(2) + ":00");
+					var rest : String = time_r.matched(3);
+					if(action_r.match(rest)) {
+						logLines.add({time:time, type:1, rest:action_r.matched(1)});
+					} else if(user_r.match(rest)) {
+						logLines.add({time:time, type:2, user:user_r.matched(1), rest:user_r.matched(2)});
+					} else {
+						logLines.add({time:time, type: 0, rest:rest});
+					}
 				}
 			}
 		}
 
+		date = new Date(yearNum, monthNum, dayNum, 0, 0, 0);
 		App.context.helpers = new Helpers();
 		App.context.month = month;
 		App.context.yearNum = yearNum;
 		App.context.monthNum = monthNum;
 		App.context.dayNum = dayNum;
-		App.context.dayName = dayNumbertoName.get(dayNum);
+		App.context.dayName = dayNumbertoName.get(date.getDay());
 		App.context.monthName = monthNumbertoName.get(monthNum);
 		App.context.logFile = logFile;
 		App.context.logLines = logLines;

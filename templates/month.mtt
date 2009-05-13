@@ -2,7 +2,9 @@
 	::if month.weeks::
 		<table border="3" cellspacing="3" cellpadding="3">
 			<tr>
-				<td colspan="7" align="center"><b>::monthName:: ::yearNum::</b></td>
+				<td><a href="::helpers.prevMonthParams(yearNum, monthNum)::">&lt;</a></td>
+				<td colspan="5" align="center"><b>::monthName:: ::yearNum::</b></td>
+				<td><a href="::helpers.nextMonthParams(yearNum, monthNum)::">&gt;</a></td>
 			</tr>
 			
 			<tr>
