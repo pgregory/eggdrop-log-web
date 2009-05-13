@@ -1,23 +1,15 @@
 ::use 'template.mtt'::
 	::fill content::
-		<h1>Logs Overview</h1>
-		::if alert::
-			<div class="notification">::alert::</div>
-		::end::
-
-		<!-- Create a for the chosen month -->
-		::use 'month.mtt'::::end::
-		<div>::dayName:: ::dayNum:: ::monthName:: ::yearNum::</div>
-		::foreach line logLines::
-			<span class="time">[::helpers.padInteger(line.time.getHours(),2):::::helpers.padInteger(line.time.getMinutes(),2)::]</span> 
-			::if line.type==2::
-				<span class="user">&lt;::line.user::&gt;</span> <span class="line">::line.rest::</span>
-			::elseif line.type==1::
-				<span class="action">::line.rest::</span>
-			::else::
-				<span class="system">::line.rest::</span>
-			::end::
-			<br/>
-		::end::
+	<div id="container">
+		<div id="header">Aqsis IRC Logs</div>
+		<div id="content">
+			<div id="navigation">
+				::use 'month.mtt'::::end::
+			</div>
+			::use 'log.mtt'::::end::
+		</div>
+		<div id="extra"></div>
+		<div id="footer"></div>
+	</div>
 	::end::
 ::end::

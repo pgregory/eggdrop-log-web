@@ -47,13 +47,13 @@ class Handler extends mtwin.web.Handler<Void> {
 
 	public function doCalendar() {
 		// Get the month, year and day from the params.
-		var date : Date = Date.now();
 		var yearNum : Int = App.request.getInt("year");
 		var monthNum : Int = App.request.getInt("month");
 		var dayNum : Int = App.request.getInt("day");
-		yearNum = if(yearNum == null) date.getFullYear() else yearNum;
-		monthNum = if(monthNum == null) date.getMonth() else monthNum;
-		dayNum = if(dayNum == null) date.getDate() else dayNum;
+		var date : Date = if(yearNum == null || monthNum == null || dayNum == null) Date.now() else new Date(yearNum, monthNum, dayNum, 0, 0, 0);
+		yearNum = date.getFullYear();
+		monthNum = date.getMonth();
+		dayNum = date.getDate();
 
 		var files : Array<String> = neko.FileSystem.readDirectory(App.logPath);
 		var logFiles : List<String> = Lambda.filter(files, function(f) { return !neko.FileSystem.isDirectory(App.logPath + f); });
@@ -100,9 +100,9 @@ class Handler extends mtwin.web.Handler<Void> {
 		var logs : IntHash<Dynamic> = new IntHash<Dynamic>();
 		var s : String = "aqsis\\.log\\.([0-9]+)" + monthNumbertoName.get(monthNum) + yearNum;
 		var r : EReg = new EReg(s, "");
-		var startDate = new Date(yearNum, monthNum, 0, 0, 0, 0);
+		var startDate = new Date(yearNum, monthNum, 1, 0, 0, 0);
 		var startDay : Int = startDate.getDay();
-		var dayNum : Int = -startDay;
+		var dayNum : Int = -(startDay-1);
 		
 		var weeksList : Array<Array<{day:Int, log:String}>> = new Array<Array<{day:Int, log:String}>>();
 		for(week in 0...6) {
@@ -117,15 +117,15 @@ class Handler extends mtwin.web.Handler<Void> {
 			if(r.match(logfile)) {
 				var day : String  = r.matched(1);
 				var dayNum : Int = Std.parseInt(day);
-				var week : Int = Math.floor((dayNum + startDay + 0.5) / 7);
+				var week : Int = Math.floor((dayNum + startDay - 0.5) / 7);
 				var date : Date = new Date(yearNum, monthNum, dayNum, 0,0,0);
 				var weekDay : Int = date.getDay();
 				weeksList[week][weekDay].log = logfile;
 			}
 		}
 
-		var month : {month : Int, daycount : Int, weeks : Dynamic};
-		month = {month:monthNum, daycount:DateTools.getMonthDays(startDate),weeks:weeksList};
+		var month : {daycount : Int, weeks : Dynamic};
+		month = {daycount:DateTools.getMonthDays(startDate),weeks:weeksList};
 		return month;
 	}
 

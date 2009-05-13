@@ -1,0 +1,12 @@
+<div id="logtitle">::dayName:: ::dayNum:: ::monthName:: ::yearNum::</div>
+::foreach line logLines::
+	<span class="time">[::helpers.padInteger(line.time.getHours(),2):::::helpers.padInteger(line.time.getMinutes(),2)::]</span> 
+	::if line.type==2::
+		<span class="user">&lt;::line.user::&gt;</span> <span class="line">::line.rest::</span>
+	::elseif line.type==1::
+		<span class="action">::line.rest::</span>
+	::else::
+		<span class="system">::line.rest::</span>
+	::end::
+	<br/>
+::end::

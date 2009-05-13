@@ -2,7 +2,41 @@ tr.oddtrue {
 	background-color: lightgrey;
 }
 
-div.month table{
+div#container {
+}
+
+div#header {
+	position: relative;
+	background-color: #EBEBEB;
+	padding: 5px;
+	margin: 0px;
+	font-size: 2em;
+}
+
+div#content {
+}
+
+div#navigation {
+	float: right;
+	width: 350px;
+	background-color: #A8A8A8;
+}
+
+div#extra {
+	clear: left;
+	width: 100%;
+}
+
+div#footer {
+}
+
+div#logtitle {
+	margin-bottom: 15px;
+	font-size: larger;
+}
+
+table#calendar {
+	width: 100%;
 }
 
 span.time {

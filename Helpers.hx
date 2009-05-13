@@ -10,21 +10,37 @@ class Helpers {
 		return StringTools.lpad(Std.string(value), "0", length);
 	}
 
-	public function prevMonthParams(yearNum:Int, monthNum:Int) {
-		var prevMonthNum = monthNum - 1;
-		if(prevMonthNum < 0) {
-			prevMonthNum = 11;
+	public function prevMonthParams(yearNum:Int, monthNum:Int, dayNum:Int) {
+		var monthNum = monthNum - 1;
+		if(monthNum < 0) {
+			monthNum = 11;
 			yearNum -= 1;
 		}
-		return "/index.n?year="+yearNum+"&month="+prevMonthNum;
+		var date : Date = new Date(yearNum, monthNum, dayNum, 0, 0, 0);
+		if(DateTools.getMonthDays(date) < dayNum) {
+			dayNum = DateTools.getMonthDays(date);
+		}
+		return "/index.n?year="+yearNum+"&month="+monthNum+"&day="+dayNum;
 	}
 
-	public function nextMonthParams(yearNum:Int, monthNum:Int) {
-		var nextMonthNum = monthNum + 1;
-		if(nextMonthNum > 11) {
-			nextMonthNum = 0;
+	public function nextMonthParams(yearNum:Int, monthNum:Int, dayNum:Int) {
+		var monthNum = monthNum + 1;
+		if(monthNum > 11) {
+			monthNum = 0;
 			yearNum += 1;
 		}
-		return "/index.n?year="+yearNum+"&month="+nextMonthNum;
+		var date : Date = new Date(yearNum, monthNum, dayNum, 0, 0, 0);
+		if(DateTools.getMonthDays(date) < dayNum) {
+			dayNum = DateTools.getMonthDays(date);
+		}
+		return "/index.n?year="+yearNum+"&month="+monthNum+"&day="+dayNum;
+	}
+
+	public function prevYearParams(yearNum:Int, monthNum:Int, dayNum:Int) {
+		return "/index.n?year="+(yearNum-1)+"&month="+monthNum+"&day="+dayNum;
+	}
+
+	public function nextYearParams(yearNum:Int, monthNum:Int, dayNum:Int) {
+		return "/index.n?year="+(yearNum+1)+"&month="+monthNum+"&day="+dayNum;
 	}
 }
