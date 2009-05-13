@@ -1,0 +1,14 @@
+::use 'template.mtt'::
+	::fill content::
+		<h1>Logs Overview</h1>
+		::if alert::
+			<div class="notification">::alert::</div>
+		::end::
+
+		<!-- Create a for the chosen month -->
+		::use 'month.mtt'::::end::
+		::foreach line logLines::
+			<span class="time">[::helpers.padInteger(line.time.getHours(),2):::::helpers.padInteger(line.time.getMinutes(),2)::]</span> <span class="line">::line.line::</span><br/>
+		::end::
+	::end::
+::end::

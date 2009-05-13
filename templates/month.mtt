@@ -1,0 +1,36 @@
+<div class="month">
+	::if month.weeks::
+		<table border="3" cellspacing="3" cellpadding="3">
+			<tr>
+				<td colspan="7" align="center"><b>::monthName:: ::yearNum::</b></td>
+			</tr>
+			
+			<tr>
+				<td align="center">Sun</td>
+				<td align="center">Mon</td>
+				<td align="center">Tue</td>
+				<td align="center">Wed</td>
+				<td align="center">Thu</td>
+				<td align="center">Fri</td>
+				<td align="center">Sat</td>
+			</tr>
+			::foreach week month.weeks::
+				::if week.length > 0::
+					<tr>
+						::foreach day week::
+							::if day.day > 0 && day.day <= month.daycount::
+								::if day.log != ""::
+									<td align="center"><a href="/index.n?day=::day.day::">::day.day::</a></td>
+								::else::
+									<td align="center">::day.day::</td>
+								::end::
+							::else::
+								<td><br/></td>
+							::end::
+						::end::
+					</tr>
+				::end::
+			::end::
+		</table>
+	::end::
+</div>
