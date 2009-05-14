@@ -1,48 +1,9 @@
 class Handler extends mtwin.web.Handler<Void> {
-	static var monthNametoNumber : Hash<Int>;
-	static var monthNumbertoName : IntHash<String>;
-	static var dayNumbertoName : IntHash<String>;
-
 	public function new() {
 		super();
 		free("default", "calendar.mtt", doCalendar);
-		monthNametoNumber = new Hash<Int>();
-		monthNumbertoName = new IntHash<String>();
-		dayNumbertoName = new IntHash<String>();
+		free("search", "search.mtt", doSearch);
 
-		monthNametoNumber.set("Jan", 0);
-		monthNametoNumber.set("Feb", 1);
-		monthNametoNumber.set("Mar", 2);
-		monthNametoNumber.set("Apr", 3);
-		monthNametoNumber.set("May", 4);
-		monthNametoNumber.set("Jun", 5);
-		monthNametoNumber.set("Jul", 6);
-		monthNametoNumber.set("Aug", 7);
-		monthNametoNumber.set("Sep", 8);
-		monthNametoNumber.set("Oct", 9);
-		monthNametoNumber.set("Nov", 10);
-		monthNametoNumber.set("Dec", 11);
-
-		monthNumbertoName.set(0, "Jan");
-		monthNumbertoName.set(1, "Feb");
-		monthNumbertoName.set(2, "Mar");
-		monthNumbertoName.set(3, "Apr");
-		monthNumbertoName.set(4, "May");
-		monthNumbertoName.set(5, "Jun");
-		monthNumbertoName.set(6, "Jul");
-		monthNumbertoName.set(7, "Aug");
-		monthNumbertoName.set(8, "Sep");
-		monthNumbertoName.set(9, "Oct");
-		monthNumbertoName.set(10, "Nov");
-		monthNumbertoName.set(11, "Dec");
-
-		dayNumbertoName.set(0, "Sunday");
-		dayNumbertoName.set(1, "Monday");
-		dayNumbertoName.set(2, "Tuesday");
-		dayNumbertoName.set(3, "Wednesday");
-		dayNumbertoName.set(4, "Thursday");
-		dayNumbertoName.set(5, "Friday");
-		dayNumbertoName.set(6, "Saturday");
 	}
 
 	public function doCalendar() {
@@ -61,7 +22,7 @@ class Handler extends mtwin.web.Handler<Void> {
 		var month : List<Dynamic> = getMonth(yearNum, monthNum, logFiles);
 
 		var logLines : List<Dynamic> = new List<Dynamic>(); 
-		var logFile : String = App.logPath + "aqsis.log." + StringTools.lpad(Std.string(dayNum), "0", 2) + monthNumbertoName.get(monthNum) + yearNum;
+		var logFile : String = App.logPath + "aqsis.log." + StringTools.lpad(Std.string(dayNum), "0", 2) + App.monthNumbertoName.get(monthNum) + yearNum;
 		var time_r = ~/\[([0-9]+):([0-9]+)\] (.*)$/;
 		var action_r = ~/Action: (.*)$/;
 		var user_r = ~/<([^>]+)> (.*)$/;
@@ -89,16 +50,45 @@ class Handler extends mtwin.web.Handler<Void> {
 		App.context.yearNum = yearNum;
 		App.context.monthNum = monthNum;
 		App.context.dayNum = dayNum;
-		App.context.dayName = dayNumbertoName.get(date.getDay());
-		App.context.monthName = monthNumbertoName.get(monthNum);
+		App.context.dayName = App.dayNumbertoName.get(date.getDay());
+		App.context.monthName = App.monthNumbertoName.get(monthNum);
 		App.context.logFile = logFile;
 		App.context.logLines = logLines;
+	}
+
+	function doSearch() {
+		var query = neko.Web.getParams().get("query");
+		if(query == null || query == "") {
+			neko.Web.redirect("/index.n");
+		}
+		var results : List<String> = new List<String>();
+		var result_values : List<Date> = new List<Date>();
+		var output : String = new neko.io.Process("namazu", ["-l", query, App.basePath + "/search"]).stdout.readAll().toString();
+		output = StringTools.rtrim(output);
+		if(output.length != 0) {
+			results = Lambda.map(output.split("\n"), function(r) { return new neko.io.Path(r).ext; });
+			var split = function(e) {
+				var r = ~/([0-9]+)([A-Za-z]+)([0-9]+)/;
+				if(!r.match(e)) {
+					throw("Error: invalid result data");
+				} else {
+					var date : Date = new Date(Std.parseInt(r.matched(3)), App.monthNametoNumber.get(r.matched(2)), Std.parseInt(r.matched(1)), 0, 0, 0);
+					return date;
+				}
+			}
+			result_values = results.map(split);
+		}
+
+		App.context.helpers = new Helpers();
+		App.context.results = results;
+		App.context.result_values = result_values;
+		App.context.query = query;
 	}
 
 	function getMonth(yearNum : Int, monthNum : Int, logFiles : List<String>) : Dynamic {
 		// Get the list of dates for which there are logs available.
 		var logs : IntHash<Dynamic> = new IntHash<Dynamic>();
-		var s : String = "aqsis\\.log\\.([0-9]+)" + monthNumbertoName.get(monthNum) + yearNum;
+		var s : String = "aqsis\\.log\\.([0-9]+)" + App.monthNumbertoName.get(monthNum) + yearNum;
 		var r : EReg = new EReg(s, "");
 		var startDate = new Date(yearNum, monthNum, 1, 0, 0, 0);
 		var startDay : Int = startDate.getDay();

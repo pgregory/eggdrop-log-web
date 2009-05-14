@@ -1,0 +1,13 @@
+::use 'template.mtt'::
+	::fill content::
+		<ul>
+		::foreach result result_values::
+			<li>
+				<a href="/index.n?year=::result.getFullYear()::&month=::result.getMonth()::&day=::result.getDate()::">::helpers.dayName(result.getDay()):: ::result.getDate():: ::helpers.monthName(result.getMonth()):: ::result.getFullYear()::</a>
+			</li>
+		::end::
+		</ul>
+	::end::
+	::fill navigation::
+	::end::
+::end::

@@ -1,15 +1,8 @@
 ::use 'template.mtt'::
 	::fill content::
-	<div id="container">
-		<div id="header">Aqsis IRC Logs</div>
-		<div id="content">
-			<div id="navigation">
-				::use 'month.mtt'::::end::
-			</div>
-			::use 'log.mtt'::::end::
-		</div>
-		<div id="extra"></div>
-		<div id="footer"></div>
-	</div>
+		::use 'log.mtt'::::end::
+	::end::
+	::fill navigation::
+		::use 'month.mtt'::::end::
 	::end::
 ::end::

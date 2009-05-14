@@ -43,4 +43,12 @@ class Helpers {
 	public function nextYearParams(yearNum:Int, monthNum:Int, dayNum:Int) {
 		return "/index.n?year="+(yearNum+1)+"&month="+monthNum+"&day="+dayNum;
 	}
+
+	public function dayName(dayNum : Int) : String {
+		return App.dayNumbertoName.get(dayNum);
+	}
+
+	public function monthName(monthNum : Int) : String {
+		return App.monthNumbertoName.get(monthNum);
+	}
 }
