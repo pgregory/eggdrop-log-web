@@ -7,7 +7,7 @@
 	</head>
 	<body>
 		<div id="container">
-			<div id="header">Aqsis IRC Logs</div>
+			<div id="header"><a href="/index.n">Aqsis IRC Logs</a></div>
 			<div id="extra">
 				<form action="/index.n/search">
 					<table>
