@@ -1,12 +1,15 @@
 class Handler extends mtwin.web.Handler<Void> {
 	public function new() {
 		super();
-		free("default", "calendar.mtt", doCalendar);
+		free("default", "main.mtt", doMain);
 		free("search", "search.mtt", doSearch);
+		free("calendar", "month.mtt", doCalendar);
 
 	}
 
-	public function doCalendar() {
+	public function doMain() {
+		doCalendar();
+
 		// Get the month, year and day from the params.
 		var yearNum : Int = App.request.getInt("year");
 		var monthNum : Int = App.request.getInt("month");
@@ -15,11 +18,6 @@ class Handler extends mtwin.web.Handler<Void> {
 		yearNum = date.getFullYear();
 		monthNum = date.getMonth();
 		dayNum = date.getDate();
-
-		var files : Array<String> = neko.FileSystem.readDirectory(App.logPath);
-		var logFiles : List<String> = Lambda.filter(files, function(f) { return !neko.FileSystem.isDirectory(App.logPath + f); });
-
-		var month : List<Dynamic> = getMonth(yearNum, monthNum, logFiles);
 
 		var logLines : List<Dynamic> = new List<Dynamic>(); 
 		var logFile : String = App.logPath + "aqsis.log." + StringTools.lpad(Std.string(dayNum), "0", 2) + App.monthNumbertoName.get(monthNum) + yearNum;
@@ -43,15 +41,6 @@ class Handler extends mtwin.web.Handler<Void> {
 				}
 			}
 		}
-
-		date = new Date(yearNum, monthNum, dayNum, 0, 0, 0);
-		App.context.helpers = new Helpers();
-		App.context.month = month;
-		App.context.yearNum = yearNum;
-		App.context.monthNum = monthNum;
-		App.context.dayNum = dayNum;
-		App.context.dayName = App.dayNumbertoName.get(date.getDay());
-		App.context.monthName = App.monthNumbertoName.get(monthNum);
 		App.context.logFile = logFile;
 		App.context.logLines = logLines;
 	}
@@ -83,6 +72,31 @@ class Handler extends mtwin.web.Handler<Void> {
 		App.context.results = results;
 		App.context.result_values = result_values;
 		App.context.query = query;
+	}
+
+	function doCalendar() {
+		// Get the month, year and day from the params.
+		var yearNum : Int = App.request.getInt("year");
+		var monthNum : Int = App.request.getInt("month");
+		var dayNum : Int = App.request.getInt("day");
+		var date : Date = if(yearNum == null || monthNum == null || dayNum == null) Date.now() else new Date(yearNum, monthNum, dayNum, 0, 0, 0);
+		yearNum = date.getFullYear();
+		monthNum = date.getMonth();
+		dayNum = date.getDate();
+
+		var files : Array<String> = neko.FileSystem.readDirectory(App.logPath);
+		var logFiles : List<String> = Lambda.filter(files, function(f) { return !neko.FileSystem.isDirectory(App.logPath + f); });
+
+		var month : List<Dynamic> = getMonth(yearNum, monthNum, logFiles);
+
+		date = new Date(yearNum, monthNum, dayNum, 0, 0, 0);
+		App.context.helpers = new Helpers();
+		App.context.month = month;
+		App.context.yearNum = yearNum;
+		App.context.monthNum = monthNum;
+		App.context.dayNum = dayNum;
+		App.context.dayName = App.dayNumbertoName.get(date.getDay());
+		App.context.monthName = App.monthNumbertoName.get(monthNum);
 	}
 
 	function getMonth(yearNum : Int, monthNum : Int, logFiles : List<String>) : Dynamic {

@@ -4,3 +4,4 @@ compiled/*.neko
 compiled/*.n
 compiled/*.out
 search
+*.js

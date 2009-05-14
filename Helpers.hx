@@ -20,7 +20,7 @@ class Helpers {
 		if(DateTools.getMonthDays(date) < dayNum) {
 			dayNum = DateTools.getMonthDays(date);
 		}
-		return "/index.n?year="+yearNum+"&month="+monthNum+"&day="+dayNum;
+		return "javascript:Calendar.getCalendar("+yearNum+", "+monthNum+", "+dayNum+")";
 	}
 
 	public function nextMonthParams(yearNum:Int, monthNum:Int, dayNum:Int) {
@@ -33,15 +33,15 @@ class Helpers {
 		if(DateTools.getMonthDays(date) < dayNum) {
 			dayNum = DateTools.getMonthDays(date);
 		}
-		return "/index.n?year="+yearNum+"&month="+monthNum+"&day="+dayNum;
+		return "javascript:Calendar.getCalendar("+yearNum+", "+monthNum+", "+dayNum+")";
 	}
 
 	public function prevYearParams(yearNum:Int, monthNum:Int, dayNum:Int) {
-		return "/index.n?year="+(yearNum-1)+"&month="+monthNum+"&day="+dayNum;
+		return "javascript:Calendar.getCalendar("+(yearNum-1)+", "+monthNum+", "+dayNum+")";
 	}
 
 	public function nextYearParams(yearNum:Int, monthNum:Int, dayNum:Int) {
-		return "/index.n?year="+(yearNum+1)+"&month="+monthNum+"&day="+dayNum;
+		return "javascript:Calendar.getCalendar("+(yearNum+1)+", "+monthNum+", "+dayNum+")";
 	}
 
 	public function dayName(dayNum : Int) : String {
