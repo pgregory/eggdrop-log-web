@@ -1,5 +1,5 @@
 ::if month.weeks::
-	<table id="calendar" border="3" cellspacing="3" cellpadding="3">
+	<table id="calendar" border="1" cellspacing="1" cellpadding="3">
 		<tr>
 			<td><a href="::helpers.prevYearParams(yearNum, monthNum, dayNum)::">&lt;&lt;</a></td>
 			<td><a href="::helpers.prevMonthParams(yearNum, monthNum, dayNum)::">&lt;</a></td>

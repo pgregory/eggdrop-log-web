@@ -1,16 +1,25 @@
+body {
+	cursor: default;
+	font-family: sans-serif;
+}
+
+h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+
 tr.oddtrue {
+	background-color: lightgrey;
+}
+
+td:hover {
 	background-color: lightgrey;
 }
 
 div#container {
 }
 
-div#header {
-	position: relative;
-	background-color: #EBEBEB;
-	padding: 5px;
-	margin: 0px;
-	font-size: 2em;
+div#search {
+	float: right;
 }
 
 div#content {
@@ -19,23 +28,17 @@ div#content {
 div#navigation {
 	float: right;
 	width: 350px;
-	background-color: #A8A8A8;
-}
-
-div#extra {
-	clear: left;
-	width: 100%;
+	background-color: #a8a8a8;
 }
 
 div#footer {
 }
 
 div#logtitle {
-	margin-bottom: 15px;
-	font-size: larger;
 }
 
 table#calendar {
+	border: 1px solid lightgrey;
 	width: 100%;
 }
 
@@ -49,9 +52,10 @@ span.user {
 
 span.action {
 	color: red;
+	font-style: italic;
 }
 
 span.system {
 	font-style: italic;
-	color: grey;
+	color: lightgrey;
 }

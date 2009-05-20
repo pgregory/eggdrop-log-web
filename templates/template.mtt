@@ -1,25 +1,23 @@
 <!DOCTYPE xhtml PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
-		<title>IRCLogs</title>
+		<title>Aqsis Renderer : Community Chat</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<link href="/css/favicon.ico" type="image/x-icon" rel="shortcut icon"/>
 		<link rel="stylesheet" type="text/css" href="/css/irclogs.css" />
 		<script type="text/javascript" src="Calendar.js"></script>
 	</head>
 	<body>
 		<div id="container">
-			<div id="header"><a href="/index.n">Aqsis IRC Logs</a></div>
-			<div id="extra">
+			<div id="search">
 				<form action="/index.n/search">
-					<table>
-						<tr>
-							<td align="right">Search</td>
-							<td><input type="text" name="query" size="20"/></td>
-							<td><input type="submit" value="Search"/></td>
-						</tr>
-					</table>
+					<input type="text" name="query" size="20"/><input type="submit" value="Search"/>
 				</form>
 			</div>
+			<div id="menu">
+                                <p><a href="/">Home</a> | <a href="http://widget.mibbit.com/?settings=b45460ef046a97c006ab76624fb3d2d5&customprompt=The%20password%20is%20password&server=irc.freenode.net&channel=%23aqsis&nick=maqs%3F&noServerNotices=true&noServerMotd=true&autoConnect=true&promptPass=true">Join Chat</a> | <a href="/old">Historic Chat</a></p>
+                        </div>
+			<div id="header"><h1>Aqsis Community Chat</h1></div>
 			<div id="content">
 				<div id="navigation">
 					::raw navigation::
