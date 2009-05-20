@@ -51,4 +51,16 @@ class Helpers {
 	public function monthName(monthNum : Int) : String {
 		return App.monthNumbertoName.get(monthNum);
 	}
+
+	public function dayDateName(dayNum : Int) : String {
+		var suffix : String = "th";
+		if(dayNum == 1 || dayNum == 21 || dayNum == 31 ) {
+			suffix = "st";
+		} else if(dayNum == 2 || dayNum == 22) {
+			suffix = "nd";
+		} else if(dayNum == 3 || dayNum == 23) {
+			suffix = "rd";
+		}
+		return Std.string(dayNum) + suffix;
+	}
 }

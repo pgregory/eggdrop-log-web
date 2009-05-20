@@ -11,13 +11,10 @@ class Handler extends mtwin.web.Handler<Void> {
 		doCalendar();
 
 		// Get the month, year and day from the params.
-		var yearNum : Int = App.request.getInt("year");
-		var monthNum : Int = App.request.getInt("month");
-		var dayNum : Int = App.request.getInt("day");
-		var date : Date = if(yearNum == null || monthNum == null || dayNum == null) Date.now() else new Date(yearNum, monthNum, dayNum, 0, 0, 0);
-		yearNum = date.getFullYear();
-		monthNum = date.getMonth();
-		dayNum = date.getDate();
+		var date : Date = getDate();
+		var yearNum : Int = date.getFullYear();
+		var monthNum : Int = date.getMonth();
+		var dayNum : Int = date.getDate();
 
 		var logLines : List<Dynamic> = new List<Dynamic>(); 
 		var logFile : String = App.logPath + "aqsis.log." + StringTools.lpad(Std.string(dayNum), "0", 2) + App.monthNumbertoName.get(monthNum) + yearNum;
@@ -76,13 +73,10 @@ class Handler extends mtwin.web.Handler<Void> {
 
 	function doCalendar() {
 		// Get the month, year and day from the params.
-		var yearNum : Int = App.request.getInt("year");
-		var monthNum : Int = App.request.getInt("month");
-		var dayNum : Int = App.request.getInt("day");
-		var date : Date = if(yearNum == null || monthNum == null || dayNum == null) Date.now() else new Date(yearNum, monthNum, dayNum, 0, 0, 0);
-		yearNum = date.getFullYear();
-		monthNum = date.getMonth();
-		dayNum = date.getDate();
+		var date : Date = getDate();
+		var yearNum : Int = date.getFullYear();
+		var monthNum : Int = date.getMonth();
+		var dayNum : Int = date.getDate();
 
 		var files : Array<String> = neko.FileSystem.readDirectory(App.logPath);
 		var logFiles : List<String> = Lambda.filter(files, function(f) { return !neko.FileSystem.isDirectory(App.logPath + f); });
@@ -97,6 +91,23 @@ class Handler extends mtwin.web.Handler<Void> {
 		App.context.dayNum = dayNum;
 		App.context.dayName = App.dayNumbertoName.get(date.getDay());
 		App.context.monthName = App.monthNumbertoName.get(monthNum);
+	}
+
+	function getDate() : Date {
+		var yearNum : Int = App.request.getInt("year");
+		var monthNum : Int = App.request.getInt("month");
+		var dayNum : Int = App.request.getInt("day");
+		var date : String = App.request.get("date", "");
+		if(date == "") {
+			return if(yearNum == null || monthNum == null || dayNum == null) Date.now() else new Date(yearNum, monthNum, dayNum, 0, 0, 0);
+		} else {
+			var r = ~/([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])/;
+			if(r.match(date)) {
+				return new Date(Std.parseInt(r.matched(1)), Std.parseInt(r.matched(2))-1, Std.parseInt(r.matched(3)), 0, 0, 0);
+			} else {
+				return Date.now();
+			}
+		}
 	}
 
 	function getMonth(yearNum : Int, monthNum : Int, logFiles : List<String>) : Dynamic {

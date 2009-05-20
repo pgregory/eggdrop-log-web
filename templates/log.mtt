@@ -1,4 +1,4 @@
-<div id="logtitle">::dayName:: ::dayNum:: ::monthName:: ::yearNum::</div>
+<div id="logtitle"><h3>::dayName::, ::monthName:: ::helpers.dayDateName(dayNum):: (::yearNum::)</h3></div>
 ::foreach line logLines::
 	<span class="time">[::helpers.padInteger(line.time.getHours(),2):::::helpers.padInteger(line.time.getMinutes(),2)::]</span> 
 	::if line.type==2::
